@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الكورس</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a73e8; --bg: #f8f9fa; }
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); margin: 0; padding-bottom: 30px; }
+        
+        /* غلاف الكورس */
+        .course-header { height: 250px; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), url('https://via.placeholder.com/400x250'); background-size: cover; display: flex; align-items: flex-end; padding: 20px; color: white; }
+        
+        .content { padding: 20px; }
+        .price-badge { background: #ffd700; color: #000; padding: 5px 15px; border-radius: 20px; font-weight: 800; font-size: 14px; }
+        
+        /* نظام القفل */
+        .lock-section { background: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: -40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; z-index: 10; }
+        .activation-input { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; margin: 15px 0; text-align: center; font-size: 18px; letter-spacing: 2px; }
+        .btn-activate { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; }
+
+        /* قائمة الدروس */
+        .lessons-list { margin-top: 25px; }
+        .lesson-item { background: white; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; border: 1px solid #eee; }
+        .lesson-number { width: 30px; height: 30px; background: #eaf2ff; color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .lock-icon { margin-right: auto; color: #999; }
+    </style>
+</head>
+<body>
+
+    <div class="course-header" id="courseHeader">
+        <div>
+            <span class="price-badge" id="coursePrice">... د.ع</span>
+            <h1 id="courseTitle" style="margin: 10px 0 0 0;">جاري التحميل...</h1>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- قفل الاشتراك -->
+        <div class="lock-section">
+            <p style="font-weight: bold; color: #444;">هذا الكورس مغلق، يرجى تفعيله</p>
+            <input type="text" class="activation-input" placeholder="ادخل كود الاشتراك">
+            <button class="btn-activate">تفعيل الكورس الآن 🔑</button>
+        </div>
+
+        <div class="lessons-list">
+            <h3 style="margin-bottom: 15px;">منهج الكورس</h3>
+            <!-- دروس تجريبية -->
+            <div class="lesson-item">
+                <div class="lesson-number">1</div>
+                <div class="lesson-info">
+                    <div style="font-weight: bold; font-size: 14px;">المقدمة والتعريف</div>
+                    <div style="font-size: 12px; color: #777;">12:45 دقيقة</div>
+                </div>
+                <div class="lock-icon">🔒</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // إعدادات Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTfA0nIkAoYNNZNeBFJ3KJLZ8qBxevqts",
+            authDomain: "courser-6c617.firebaseapp.com",
+            projectId: "courser-6c617",
+            storageBucket: "courser-6c617.firebasestorage.app",
+            messagingSenderId: "778233934889",
+            appId: "1:778233934889:web:5836f09920b02747cb5838"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function fetchDetails() {
+            // التعديل هنا: نسحب الـ ID من الذاكرة التي خزناها في index.html
+            const courseId = localStorage.getItem("selectedCourseId");
+            
+            if (!courseId) {
+                document.getElementById('courseTitle').innerText = "حدث خطأ في قراءة الكورس";
+                return;
+            }
+
+            try {
+                // طلب بيانات الكورس من السحابة
+                const docRef = doc(db, "courses", courseId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    // تعبئة البيانات في صفحتك
+                    document.getElementById('courseTitle').innerText = data.title;
+                    document.getElementById('coursePrice').innerText = data.price + " د.ع";
+                }
+            } catch (error) {
+                console.error("خطأ:", error);
+            }
+        }
+
+        // تشغيل دالة الجلب فوراً
+        fetchDetails();
+    </script>
+</body>
+</html>

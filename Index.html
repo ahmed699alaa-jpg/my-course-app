@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تطبيق الكورسات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1a73e8; 
+            --bg-light: #f8f9fa; 
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+        }
+
+        body { font-family: 'Tajawal', sans-serif; background-color: var(--bg-light); margin: 0; padding: 0; padding-bottom: 80px; color: var(--text-main); overflow-x: hidden; }
+
+        /* الشريط العلوي */
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 45px; height: 45px; background-color: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+        .user-info h4 { margin: 0; color: var(--primary-blue); font-size: 14px; font-weight: 700;}
+        .user-info p { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main);}
+        .header-icons { font-size: 22px; color: var(--text-main); }
+        .header-icons span { margin-right: 15px; cursor: pointer; }
+
+        /* البانر الرئيسي */
+        .hero-banner { margin: 10px 20px; background: linear-gradient(135deg, #e3effd 0%, #c4defc 100%); border-radius: 16px; padding: 30px 20px; display: flex; justify-content: space-between; align-items: center; position: relative; }
+        .banner-text h2 { margin: 0; font-size: 22px; color: #1e3a8a; font-weight: 800; line-height: 1.4; }
+        .banner-text span { color: var(--primary-blue); font-size: 26px; }
+
+        /* العناوين الفرعية */
+        .section-header { margin: 25px 20px 15px; font-size: 18px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; }
+        .section-header a { font-size: 13px; color: var(--primary-blue); text-decoration: none; font-weight: bold; }
+
+        /* التمرير الأفقي */
+        .horizontal-scroll { display: flex; overflow-x: auto; padding: 0 20px 15px; gap: 15px; scrollbar-width: none; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+
+        /* تصميم الفئات */
+        .category-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 80px; }
+        .cat-icon-box { width: 70px; height: 70px; border-radius: 18px; display: flex; justify-content: center; align-items: center; font-size: 28px; }
+        .cat-icon-box.blue { background-color: #eaf2ff; color: #1a73e8; }
+        .cat-icon-box.cyan { background-color: #e0f2fe; color: #0284c7; }
+        .cat-icon-box.pink { background-color: #fce7f3; color: #db2777; }
+        .cat-icon-box.green { background-color: #dcfce7; color: #16a34a; }
+        .category-item span { font-size: 13px; font-weight: 700; text-align: center; }
+
+        /* لوحات الكورسات (Panels) */
+        .course-panel { min-width: 250px; background-color: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid #e5e7eb;}
+        .panel-image { height: 130px; background: linear-gradient(135deg, #0a2342, #1a73e8); position: relative; display: flex; justify-content: center; align-items: center; color: white; font-size: 40px; }
+        .price-tag { position: absolute; top: 10px; left: 10px; background-color: rgba(0, 0, 0, 0.6); color: white; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+        .panel-info { padding: 15px; }
+        .panel-title { margin: 0 0 8px 0; font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.4; }
+        .panel-instructor { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+        /* الشريط السفلي */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background-color: white; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.03); border-top-left-radius: 20px; border-top-right-radius: 20px; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 13px; font-weight: 500; }
+        .nav-item.active { color: var(--primary-blue); font-weight: 700; }
+        .nav-icon { font-size: 22px; }
+        
+        .loading-text { width: 100%; text-align: center; padding: 20px; color: #6b7280; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- الشريط العلوي -->
+    <div class="top-header">
+        <div class="user-profile">
+            <div class="avatar">👨‍⚕️</div>
+            <div class="user-info">
+                <h4>اهلا بك</h4>
+                <p>د. احمد علاء شاكر</p>
+            </div>
+        </div>
+        <div class="header-icons">
+            <span>🔍</span>
+            <span>🔔</span>
+        </div>
+    </div>
+
+    <!-- البانر الرئيسي -->
+    <div class="hero-banner">
+        <div class="banner-text">
+            <h2>انطلق مع منصة<br><span>Knowledge</span></h2>
+        </div>
+        <div style="font-size: 50px;">🚀</div>
+    </div>
+
+    <!-- قسم الفئات -->
+    <div class="section-header">الفئات</div>
+    <div class="horizontal-scroll">
+        <div class="category-item"><div class="cat-icon-box blue">💼</div><span>الاعلام الدوائي</span></div>
+        <div class="category-item"><div class="cat-icon-box cyan">📝</div><span>المواد الدراسية</span></div>
+        <div class="category-item"><div class="cat-icon-box pink">⚕️</div><span>صيدلية المجتمع</span></div>
+        <div class="category-item"><div class="cat-icon-box green">🔬</div><span>العملي</span></div>
+    </div>
+
+    <!-- قسم الدورات (سيتم جلبها من فايربيس) -->
+    <div class="section-header">
+        <span>الدورات المتاحة</span>
+        <a href="#">عرض المزيد</a>
+    </div>
+    
+    <!-- الحاوية التي ستظهر فيها الكورسات -->
+    <div class="horizontal-scroll" id="coursesList">
+        <div class="loading-text">جاري تحميل الكورسات من السحابة... ⏳</div>
+    </div>
+
+    <!-- الشريط السفلي -->
+    <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">⋯</div><span>المزيد</span></div>
+        <div class="nav-item"><div class="nav-icon">📖</div><span>دوراتي</span></div>
+        <div class="nav-item active"><div class="nav-icon">🏠</div><span>الرئيسية</span></div>
+    </div>
+
+    <!-- كود الربط بـ Firebase لجلب البيانات -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // مفاتيح مشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTfA0nIkAoYNNZNeBFJ3KJLZ8qBxevqts",
+            authDomain: "courser-6c617.firebaseapp.com",
+            projectId: "courser-6c617",
+            storageBucket: "courser-6c617.firebasestorage.app",
+            messagingSenderId: "778233934889",
+            appId: "1:778233934889:web:5836f09920b02747cb5838"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // وظيفة جلب الكورسات
+        async function fetchCourses() {
+            const coursesContainer = document.getElementById('coursesList');
+            
+            try {
+                // الاتصال بقاعدة البيانات وجلب الملفات من مجلد courses
+                const querySnapshot = await getDocs(collection(db, "courses"));
+                
+                // مسح رسالة التحميل
+                coursesContainer.innerHTML = ''; 
+
+                if (querySnapshot.empty) {
+                    coursesContainer.innerHTML = '<div class="loading-text">لا توجد كورسات متاحة حالياً. أضف كورسات من لوحة التحكم!</div>';
+                    return;
+                }
+
+                // رسم الكورسات في الواجهة
+                querySnapshot.forEach((doc) => {
+                    const courseData = doc.data();
+                    
+                    // التعديل هنا: إضافة أمر الحفظ في الذاكرة والنقل المباشر داخل نفس الـ div
+                    const courseCard = `
+                    <div class="course-panel" style="cursor: pointer;" onclick="localStorage.setItem('course_id', '${doc.id}'); window.location.href='details.html';">
+                        <div class="panel-image">
+                            👨‍🏫
+                            <div class="price-tag">${courseData.price || 0} د.ع</div>
+                        </div>
+                        <div class="panel-info">
+                            <h3 class="panel-title">${courseData.title || 'بدون عنوان'}</h3>
+                            <div class="panel-instructor">
+                                <span style="color: var(--primary-blue);">📁</span>
+                                القسم: ${courseData.category || 'عام'}
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    
+                    coursesContainer.innerHTML += courseCard;
+                });
+
+            } catch (error) {
+                coursesContainer.innerHTML = `<div class="loading-text" style="color:red;">حدث خطأ في جلب البيانات: ${error.message}</div>`;
+            }
+        }
+
+        // تشغيل الوظيفة فور فتح التطبيق
+        fetchCourses();
+    </script>
+
+</body>
+</html>

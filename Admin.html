@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لوحة القيادة المتقدمة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f766e;
+            --secondary: #0d9488;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text-main: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif; background-color: var(--bg);
+            margin: 0; padding: 15px; color: var(--text-main); padding-bottom: 50px;
+        }
+
+        /* الإحصائيات السريعة */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--card); padding: 15px; border-radius: 12px;
+            text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border-bottom: 4px solid var(--secondary);
+        }
+        .stat-card h3 { margin: 0; font-size: 22px; color: var(--primary); }
+        .stat-card p { margin: 5px 0 0 0; font-size: 12px; font-weight: bold; color: #64748b; }
+
+        /* حاويات الأقسام */
+        .admin-section {
+            background: var(--card); border-radius: 16px; padding: 20px;
+            margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+        }
+        
+        .section-title {
+            font-size: 16px; font-weight: 800; border-bottom: 2px solid var(--bg);
+            padding-bottom: 10px; margin-bottom: 15px; color: var(--primary);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* عناصر الإدخال */
+        .form-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .form-group { flex: 1; margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 700; color: #475569; }
+        input, select, textarea {
+            width: 100%; padding: 10px; border: 1px solid var(--border);
+            border-radius: 8px; font-family: inherit; font-size: 13px; box-sizing: border-box;
+            background-color: #f8fafc;
+        }
+        input:focus { outline: none; border-color: var(--primary); background: #fff; }
+
+        /* إدارة المنهج (الفيديوهات) */
+        .lesson-box {
+            background: #f8fafc; border: 1px dashed #cbd5e1; padding: 10px;
+            border-radius: 8px; margin-bottom: 10px; position: relative;
+        }
+        .lesson-box input { margin-bottom: 5px; }
+        .btn-add-lesson {
+            background: #e0f2fe; color: #0284c7; width: 100%; padding: 10px;
+            border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+        }
+
+        /* الأزرار العامة */
+        .btn {
+            width: 100%; padding: 14px; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: bold; cursor: pointer; color: white;
+        }
+        .btn-save { background: var(--secondary); margin-top: 10px; }
+        .btn-danger { background: #ef4444; width: auto; padding: 5px 10px; font-size: 11px; }
+
+        /* تصميم صور السلايدر */
+        .slider-item {
+            display: flex; gap: 10px; align-items: center; background: #f8fafc;
+            padding: 10px; border-radius: 8px; margin-bottom: 10px;
+        }
+        .slider-img-preview {
+            width: 60px; height: 40px; background: #cbd5e1; border-radius: 6px;
+            display: flex; justify-content: center; align-items: center; font-size: 10px;
+        }
+
+        /* التبديل (Toggle Switch) */
+        .toggle-container { display: flex; align-items: center; gap: 10px; }
+        .toggle-switch {
+            width: 40px; height: 20px; background: #cbd5e1; border-radius: 20px;
+            position: relative; cursor: pointer;
+        }
+        .toggle-switch::after {
+            content: ''; position: absolute; top: 2px; right: 2px;
+            width: 16px; height: 16px; background: white; border-radius: 50%;
+        }
+        .toggle-switch.active { background: var(--secondary); }
+        .toggle-switch.active::after { right: 22px; }
+
+    </style>
+</head>
+<body>
+
+    <!-- لوحة الإحصائيات -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>1,240</h3>
+            <p>طالب مسجل 👥</p>
+        </div>
+        <div class="stat-card">
+            <h3>8</h3>
+            <p>كورسات نشطة 📚</p>
+        </div>
+    </div>
+
+    <!-- 1. إدارة الإعلانات (سلايدر الصور) -->
+    <div class="admin-section">
+        <div class="section-title">🖼️ صور السلايدر (الإعلانات)</div>
+        
+        <div class="slider-item">
+            <div class="slider-img-preview">صورة 1</div>
+            <div style="flex: 1;">
+                <input type="text" placeholder="رابط الصورة (URL)" style="margin-bottom: 5px;">
+                <input type="text" placeholder="الرابط عند الضغط (اختياري)">
+            </div>
+            <button class="btn btn-danger">حذف</button>
+        </div>
+        
+        <button class="btn-add-lesson">+ إضافة صورة إعلان جديدة</button>
+    </div>
+
+    <!-- 2. المولد الشامل للكورسات -->
+    <div class="admin-section">
+        <div class="section-title">
+            <span>⚙️ بناء كورس جديد</span>
+            <div class="toggle-container">
+                <span style="font-size: 11px; font-weight: bold;">نشر للمنصة</span>
+                <div class="toggle-switch active"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>عنوان الكورس</label>
+            <input type="text" id="courseTitle" placeholder="مثال: المراجعة الشاملة للوزاري">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>السعر (د.ع)</label>
+                <input type="number" id="coursePrice" placeholder="50000">
+            </div>
+            <div class="form-group">
+                <label>القسم</label>
+                <select id="courseCategory"><option>المواد الوزارية</option><option>عملي</option></select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>وصف الكورس (يظهر للطالب قبل الشراء)</label>
+            <textarea id="courseDesc" rows="3" placeholder="ماذا سيتعلم الطالب في هذا الكورس..."></textarea>
+        </div>
+
+        <!-- إضافة مقاطع الفيديو للكورس -->
+        <div style="background: var(--bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <label style="color: var(--primary);">🎥 مقاطع الفيديو (منهج الكورس)</label>
+            
+            <div class="lesson-box">
+                <input type="text" placeholder="عنوان المقطع (مثال: المحاضرة الأولى - مقدمة)">
+                <input type="text" placeholder="رابط الفيديو (YouTube, Vimeo, Firebase)">
+                <div class="form-row" style="margin-bottom: 0;">
+                    <input type="text" placeholder="مدة المقطع (مثال: 45 دقيقة)">
+                    <button class="btn btn-danger">حذف</button>
+                </div>
+            </div>
+
+            <button class="btn-add-lesson">+ إضافة مقطع فيديو آخر</button>
+        </div>
+
+        <button class="btn btn-save" id="saveBtn">حفظ الكورس بالكامل 💾</button>
+    </div>
+
+    <!-- 3. توليد أكواد التفعيل (لتباع للطلاب) -->
+    <div class="admin-section">
+        <div class="section-title">🔑 توليد أكواد الاشتراك</div>
+        <p style="font-size: 11px; color: #64748b; margin-top: -10px;">قم بتوليد أكواد مكونة من 16 رقم لإعطائها للطلاب لتفعيل الكورسات.</p>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label>اختر الكورس</label>
+                <select><option>كورس الاعلام الدوائي</option></select>
+            </div>
+            <div class="form-group">
+                <label>عدد الأكواد المطلوبة</label>
+                <input type="number" placeholder="مثال: 50 كود">
+            </div>
+        </div>
+        <button class="btn" style="background: #1e293b;">توليد الأكواد الآن 🔄</button>
+    </div>
+
+    <!-- كود الربط بـ Firebase (تم إضافته دون تخريب التصميم) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTfA0nIkAoYNNZNeBFJ3KJLZ8qBxevqts",
+            authDomain: "courser-6c617.firebaseapp.com",
+            projectId: "courser-6c617",
+            storageBucket: "courser-6c617.firebasestorage.app",
+            messagingSenderId: "778233934889",
+            appId: "1:778233934889:web:5836f09920b02747cb5838"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.addEventListener('click', async () => {
+            saveBtn.textContent = "جاري الحفظ في السحابة... ⏳";
+            try {
+                const title = document.getElementById('courseTitle').value || "بدون عنوان";
+                const price = document.getElementById('coursePrice').value || 0;
+                const desc = document.getElementById('courseDesc').value || "";
+                const category = document.getElementById('courseCategory').value || "";
+
+                await addDoc(collection(db, "courses"), {
+                    title: title,
+                    price: price,
+                    desc: desc,
+                    category: category,
+                    createdAt: new Date()
+                });
+                
+                alert("تم رفع الكورس بنجاح يا دكتور! 🚀");
+                saveBtn.textContent = "حفظ الكورس بالكامل 💾";
+                saveBtn.style.background = "#059669";
+            } catch (error) {
+                alert("خطأ: " + error.message);
+                saveBtn.textContent = "حفظ الكورس بالكامل 💾";
+            }
+        });
+    </script>
+
+</body>
+</html>
